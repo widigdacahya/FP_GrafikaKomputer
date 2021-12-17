@@ -1,7 +1,7 @@
 .masthead {
   height: 100vh;
   min-height: 500px;
-  background-image: url("assets/images/bg-index.jpg");
+  background-image: url("../assets/images/bg-index.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -10,7 +10,7 @@
 .mastheadwin {
   height: 100vh;
   min-height: 500px;
-  background-image: url("assets/images/bg-congrats.jpg");
+  background-image: url("../assets/images/bg-congrats.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -19,7 +19,7 @@
 .mastheadlose {
   height: 100vh;
   min-height: 500px;
-  background-image: url("assets/images/bg-times-up.jpg");
+  background-image: url("../assets/images/bg-times-up.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -28,7 +28,7 @@
 .mastheadins {
   height: 100vh;
   min-height: 500px;
-  background-image: url("assets/images/bg-ins.jpg");
+  background-image: url("../assets/images/bg-ins.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
