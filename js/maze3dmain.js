@@ -520,7 +520,7 @@ function gameFinish() {
   messageContainer.style.textAlign = "center";
 
   var message = document.createElement("h1");
-  message.innerHTML = "Congratulationnn, Your Score is : " + String(score);
+  message.innerHTML = "Congratulation🎊, Your Score is : " + String(score);
   message.style.textAlign = "center";
   message.style.color = "#ddd";
   message.style.padding = "15px";

@@ -7,6 +7,33 @@
   background-repeat: no-repeat;
 }
 
+.mastheadwin {
+  height: 100vh;
+  min-height: 500px;
+  background-image: url("assets/images/bg-congrats.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.mastheadlose {
+  height: 100vh;
+  min-height: 500px;
+  background-image: url("assets/images/bg-times-up.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.mastheadins {
+  height: 100vh;
+  min-height: 500px;
+  background-image: url("assets/images/bg-ins.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .btn-deep-orange {
   background-color: #f97316;
   border-radius: 24px;
