@@ -11,6 +11,7 @@ var scale = 1;
 var score = 0;
 var poin = [];
 var mouse = { x: 0, y: 0 };
+var finishDoor;
 
 //starting game
 function start() {
@@ -36,13 +37,36 @@ function initializeEngine() {
   //Kabut
 
   scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x4f4c4c, 10, 250);
+  scene.fog = new THREE.Fog(0x1a1a1a, 10, 250);
 
   //Kamera
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
   camera.position.y = 50;
   camera.rotation.order = "YXZ"; // this is not the default
   scene.add(camera);
+
+  // backsound
+  let audioListener = new THREE.AudioListener();
+  camera.add(audioListener);
+
+  // create an AudioListener and add it to the camera
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
+
+  // create a global audio source
+  const sound = new THREE.Audio(listener);
+
+  // load a sound and set it as the Audio object's buffer
+  const audioLoader = new THREE.AudioLoader();
+  audioLoader.load("assets/sound/forest.mp3", function (buffer) {
+    sound.setBuffer(buffer);
+    sound.setLoop(true);
+    sound.setVolume(0.5);
+    sound.play();
+  });
+
+  const ambLight = new THREE.AmbientLight(0x000000); // soft white light
+  scene.add(ambLight);
 
   //LightPoint jadi child Kamera
   const light = new THREE.PointLight(0xffffff, 1, 300);
@@ -58,27 +82,27 @@ function initializeEngine() {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  //Pointer Lock Controls
-  canvasContainer.requestPointerLock = canvasContainer.requestPointerLock;
-  document.exitPointerLock = document.exitPointerLock;
-  canvasContainer.onclick = function () {
-    canvasContainer.requestPointerLock();
-  };
-  document.addEventListener("pointerlockchange", lockChangeAlert, false);
+  // //Pointer Lock Controls
+  // canvasContainer.requestPointerLock = canvasContainer.requestPointerLock;
+  // document.exitPointerLock = document.exitPointerLock;
+  // canvasContainer.onclick = function () {
+  //   canvasContainer.requestPointerLock();
+  // };
+  // document.addEventListener("pointerlockchange", lockChangeAlert, false);
 
-  function lockChangeAlert() {
-    if (document.pointerLockElement === canvasContainer) {
-      console.log("The pointer lock status is now locked");
-      document.addEventListener("mousemove", moveCamera, false);
-    } else {
-      console.log("The pointer lock status is now unlocked");
-      document.removeEventListener("mousemove", moveCamera, false);
-    }
-  }
+  // function lockChangeAlert() {
+  //   if (document.pointerLockElement === canvasContainer) {
+  //     console.log("The pointer lock status is now locked");
+  //     document.addEventListener("mousemove", moveCamera, false);
+  //   } else {
+  //     console.log("The pointer lock status is now unlocked");
+  //     document.removeEventListener("mousemove", moveCamera, false);
+  //   }
+  // }
 
-  document.addEventListener("click", function (e) {
-    e.preventDefault;
-  });
+  // document.addEventListener("click", function (e) {
+  //   e.preventDefault;
+  // });
 
   showText_1();
 }
@@ -86,28 +110,28 @@ function initializeEngine() {
 var scored;
 
 function showText_1() {
-  var messageContainer = document.createElement("div");
-  messageContainer.style.position = "absolute";
-  messageContainer.style.backgroundColor = "#666";
-  messageContainer.style.border = "1px solid #333";
+  // var messageContainer = document.createElement("div");
+  // messageContainer.style.position = "absolute";
+  // messageContainer.style.backgroundColor = "#666";
+  // messageContainer.style.border = "1px solid #333";
 
-  var message = document.createElement("h1");
-  message.innerHTML = "Use W/A/S/D to move and arrow left/right rotate the camera. Click to enter fps mode";
-  message.style.textAlign = "center";
-  message.style.color = "#ddd";
-  message.style.padding = "15px";
+  // var message = document.createElement("h1");
+  // message.innerHTML = "Use W/A/S/D to move and arrow left/right rotate the camera. Click to enter fps mode";
+  // message.style.textAlign = "center";
+  // message.style.color = "#ddd";
+  // message.style.padding = "15px";
 
-  messageContainer.appendChild(message);
+  // messageContainer.appendChild(message);
 
-  document.body.appendChild(messageContainer);
+  // document.body.appendChild(messageContainer);
 
-  messageContainer.style.left = window.innerWidth / 2 - messageContainer.offsetWidth / 2 + "px";
-  messageContainer.style.top = window.innerHeight / 2 - messageContainer.offsetHeight / 2 + "px";
+  // messageContainer.style.left = window.innerWidth / 2 - messageContainer.offsetWidth / 2 + "px";
+  // messageContainer.style.top = window.innerHeight / 2 - messageContainer.offsetHeight / 2 + "px";
 
-  var timer = setTimeout(function () {
-    clearTimeout(timer);
-    document.body.removeChild(messageContainer);
-  }, 3500);
+  // var timer = setTimeout(function () {
+  //   clearTimeout(timer);
+  //   document.body.removeChild(messageContainer);
+  // }, 3500);
 
   var ScoreContainer = document.createElement("div");
   ScoreContainer.style.position = "absolute";
@@ -170,7 +194,15 @@ function initializeScene() {
     "assets/images/textures/posz.png",
     "assets/images/textures/negz.png",
   ]);
-  scene.background = skyBoxBg;
+  let skyBoxBgDarker = loaderBgBox.load([
+    "assets/images/textures/posX-j.jpg",
+    "assets/images/textures/negX-j.jpg",
+    "assets/images/textures/posY-j.jpg",
+    "assets/images/textures/negY-j.jpg",
+    "assets/images/textures/posZ-j.jpg",
+    "assets/images/textures/negZ-j.jpg",
+  ]);
+  scene.background = skyBoxBgDarker;
 
   //Membuat Wall, Pada map Wall memiliki value 2
   var size = {
@@ -187,7 +219,7 @@ function initializeScene() {
 
   var wallGeometry = new THREE.BoxGeometry(size.x, size.y, size.z);
   var wallMaterial = new THREE.MeshPhongMaterial({
-    map: loader.load("assets/images/textures/wall.jpg"),
+    map: loader.load("assets/images/textures/dark-brick.jpg"),
   });
 
   repeatTexture(wallMaterial.map, 4);
@@ -244,6 +276,20 @@ function initializeScene() {
         scene.add(ball);
       }
 
+      // pertanda endpoint
+      if (map[y][x] === "E") {
+        finishDoor = new THREE.Mesh(
+          new THREE.OctahedronGeometry(40, 0),
+          new THREE.MeshPhongMaterial({
+            color: 0xffffff,
+          })
+        );
+        finishDoor.castShadow = true;
+        finishDoor.position.set(position.x, position.y - 15, position.z);
+
+        scene.add(finishDoor);
+      }
+
       //Generate minimap
 
       miniMap.draw(x, y, map[y][x]);
@@ -270,6 +316,12 @@ function update() {
   } else if (input.keys.right) {
     moveCamera("cameraright");
   }
+
+  if (input.keys.up) {
+    moveCamera("cameraup");
+  } else if (input.keys.down) {
+    moveCamera("camerabelow");
+  }
 }
 
 //Pengaturan Score
@@ -287,6 +339,7 @@ function moveCamera(direction, num, delta) {
   };
   var rotationY = camera.rotation.y;
   var rotationX = camera.rotation.x;
+  var rotationZ = camera.rotation.z;
 
   if (num == 1) var offset = 50;
   else var offset = 40;
@@ -318,6 +371,14 @@ function moveCamera(direction, num, delta) {
       break;
     case "cameraright":
       rotationY -= moveParameters.rotation;
+      break;
+
+    // mau kamerannya bisa liat atas bawah [belum bisa]
+    case "cameraup":
+      rotationZ -= moveParameters.rotation;
+      break;
+    case "camerabelow":
+      rotationZ += moveParameters.rotation;
       break;
     // case "cameraRotation":
     //     break;
@@ -378,6 +439,7 @@ function moveCamera(direction, num, delta) {
       a.position.x += 1000;
       setScore(score);
       scene.remove(a);
+      // play soundeffect
     }
   }
 }
@@ -390,7 +452,9 @@ function timeFunction() {
 //Loop
 function mainLoop(time) {
   if (running) {
+    // finishDoor.rotation.x += 3;
     update();
+
     renderer.render(scene, camera);
     window.requestAnimationFrame(mainLoop, renderer.domElement);
   } else {
@@ -414,15 +478,6 @@ function gameFinish() {
   message.style.textAlign = "center";
   message.style.color = "#ddd";
   message.style.padding = "15px";
-
-  // var button = document.getElementById("button");
-  // button.style.display = "inline"
-  // button.style.textAlign = "center";
-  // button.style.color = "#000000";
-  // button.style.backgroundColor = "#ffffff";
-  // button.style.border = "2px solid #4CAF50";
-  // button.style.fontSize = "16px";
-  // button.onclick = "myFunct()";
 
   messageContainer.appendChild(message);
   //messageContainer.appendChild(button);
