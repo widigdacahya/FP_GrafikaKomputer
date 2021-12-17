@@ -13,6 +13,10 @@ var poin = [];
 var mouse = { x: 0, y: 0 };
 var finishDoor;
 
+function touchStarted() {
+  getAudioContext().resume();
+}
+
 //starting game
 function start() {
   initializeScene();
@@ -45,10 +49,6 @@ function initializeEngine() {
   camera.rotation.order = "YXZ"; // this is not the default
   scene.add(camera);
 
-  // backsound
-  let audioListener = new THREE.AudioListener();
-  camera.add(audioListener);
-
   // create an AudioListener and add it to the camera
   const listener = new THREE.AudioListener();
   camera.add(listener);
@@ -61,7 +61,7 @@ function initializeEngine() {
   audioLoader.load("assets/sound/forest.mp3", function (buffer) {
     sound.setBuffer(buffer);
     sound.setLoop(true);
-    sound.setVolume(0.5);
+    sound.setVolume(0.7);
     sound.play();
   });
 
@@ -110,28 +110,31 @@ function initializeEngine() {
 var scored;
 
 function showText_1() {
-  // var messageContainer = document.createElement("div");
-  // messageContainer.style.position = "absolute";
-  // messageContainer.style.backgroundColor = "#666";
-  // messageContainer.style.border = "1px solid #333";
+  // alert("Happy Playing");
 
-  // var message = document.createElement("h1");
+  var messageContainer = document.createElement("div");
+  messageContainer.style.position = "absolute";
+  messageContainer.style.backgroundColor = "#666";
+  messageContainer.style.border = "1px solid #333";
+
+  var message = document.createElement("h1");
   // message.innerHTML = "Use W/A/S/D to move and arrow left/right rotate the camera. Click to enter fps mode";
-  // message.style.textAlign = "center";
-  // message.style.color = "#ddd";
-  // message.style.padding = "15px";
+  message.innerHTML = "Use W/A/S/D to move and arrow left/right rotate the camera. Get the poin to increase your score";
+  message.style.textAlign = "center";
+  message.style.color = "#ddd";
+  message.style.padding = "15px";
 
-  // messageContainer.appendChild(message);
+  messageContainer.appendChild(message);
 
-  // document.body.appendChild(messageContainer);
+  document.body.appendChild(messageContainer);
 
-  // messageContainer.style.left = window.innerWidth / 2 - messageContainer.offsetWidth / 2 + "px";
-  // messageContainer.style.top = window.innerHeight / 2 - messageContainer.offsetHeight / 2 + "px";
+  messageContainer.style.left = window.innerWidth / 2 - messageContainer.offsetWidth / 2 + "px";
+  messageContainer.style.top = window.innerHeight / 2 - messageContainer.offsetHeight / 2 + "px";
 
-  // var timer = setTimeout(function () {
-  //   clearTimeout(timer);
-  //   document.body.removeChild(messageContainer);
-  // }, 3500);
+  var timer = setTimeout(function () {
+    clearTimeout(timer);
+    document.body.removeChild(messageContainer);
+  }, 3500);
 
   var ScoreContainer = document.createElement("div");
   ScoreContainer.style.position = "absolute";
@@ -142,12 +145,14 @@ function showText_1() {
   Score.style.textAlign = "center";
   Score.style.color = "#ddd";
   Score.style.padding = "10px";
+  Score.style.background = "#000";
 
   var Scoring = document.createElement("h4");
   Scoring.innerHTML = "0";
   Scoring.style.textAlign = "center";
   Scoring.style.color = "#ddd";
   Scoring.style.padding = "10px";
+  Scoring.style.background = "#000";
 
   scored = Scoring;
 
@@ -281,7 +286,7 @@ function initializeScene() {
         finishDoor = new THREE.Mesh(
           new THREE.OctahedronGeometry(40, 0),
           new THREE.MeshPhongMaterial({
-            color: 0xffffff,
+            envMap: skyBoxBgDarker,
           })
         );
         finishDoor.castShadow = true;
@@ -440,6 +445,21 @@ function moveCamera(direction, num, delta) {
       setScore(score);
       scene.remove(a);
       // play soundeffect
+      // create an AudioListener and add it to the camera
+      const listenerPoin = new THREE.AudioListener();
+      camera.add(listenerPoin);
+
+      // create a global audio source
+      const soundPoin = new THREE.Audio(listenerPoin);
+
+      // load a sound and set it as the Audio object's buffer
+      const audioPoinLoader = new THREE.AudioLoader();
+      audioPoinLoader.load("assets/sound/coin.mp3", function (buffer) {
+        soundPoin.setBuffer(buffer);
+        soundPoin.setLoop(false);
+        soundPoin.setVolume(0.7);
+        soundPoin.play();
+      });
     }
   }
 }
