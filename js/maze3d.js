@@ -13,8 +13,30 @@ var poin = [];
 var mouse = { x: 0, y: 0 };
 var finishDoor;
 
+// help sound played
 function touchStarted() {
   getAudioContext().resume();
+}
+
+// time
+function startTimer(duration, display) {
+  var timer = duration,
+    minutes,
+    seconds;
+  setInterval(function () {
+    minutes = parseInt(timer / 60, 10);
+    seconds = parseInt(timer % 60, 10);
+
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    display.textContent = minutes + ":" + seconds;
+
+    if (--timer < 0) {
+      // timer = duration;
+      window.location.href = "endgame.html";
+    }
+  }, 1000);
 }
 
 //starting game
@@ -26,6 +48,10 @@ function start() {
 window.onload = function () {
   initializeEngine();
   loadMap();
+
+  var fiveMinutes = 60 * 10,
+    display = document.querySelector("#time");
+  startTimer(fiveMinutes, display);
 };
 //Inisiaisasi scene
 function initializeEngine() {
