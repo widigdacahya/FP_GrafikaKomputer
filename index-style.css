@@ -1,0 +1,41 @@
+.masthead {
+  height: 100vh;
+  min-height: 500px;
+  background-image: url("assets/images/bg-index.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.btn-deep-orange {
+  background-color: #f97316;
+  border-radius: 24px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid whitesmoke;
+}
+
+.btn-deep-orange:hover {
+  background-color: #da5a2f;
+  border-radius: 24px;
+  font-weight: 600;
+  color: whitesmoke;
+  transform: scale(1.1);
+}
+
+.btn-elegant {
+  background-color: #262626;
+  border-radius: 24px;
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  border: 2px solid whitesmoke;
+}
+
+.btn-elegant:hover {
+  background-color: #111111;
+  border-radius: 24px;
+  color: white;
+  font-weight: 600;
+  transform: scale(1.1);
+}
