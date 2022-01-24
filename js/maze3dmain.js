@@ -545,7 +545,7 @@ var angleY = 0;
 
 //Maps Open
 function loadMap() {
-  var r = Math.floor(Math.random() * 3) + 1;
+  var r = Math.floor(Math.random() * 4) + 1;
   var ajax = new XMLHttpRequest();
   ajax.open("GET", "assets/maps/maze3d-" + r + ".json", true);
   ajax.onreadystatechange = function () {
